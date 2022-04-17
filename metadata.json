@@ -1,0 +1,8 @@
+{
+  "name": "Legacy (GTK3) Theme Scheme Auto Switcher",
+  "description": "Change the GTK3 theme to light/dark variant based on the system color scheme on Gnome 42",
+  "uuid": "legacyschemeautoswitcher@joshimukul29.gmail.com",
+  "shell-version": [
+    "42"
+  ]
+}
