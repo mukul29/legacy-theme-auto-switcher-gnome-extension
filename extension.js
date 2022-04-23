@@ -25,59 +25,43 @@ const DARK_SCHEME_NAME = 'prefer-dark';
 
 class Extension {
     constructor() {
-        this.schema = Gio.Settings.new('org.gnome.desktop.interface');
+    }
+
+    handleThemeChange = (theme_name) => {
+        switch(theme_name)
+        {
+            case DEFAULT_SCHEME_NAME:
+            case LIGHT_SCHEME_NAME:
+                if (this.schema.get_string('gtk-theme').endsWith("-dark")) {
+                    this.schema.set_string('gtk-theme', this.schema.get_string('gtk-theme').slice(0,-5));
+                }
+                break;
+            case DARK_SCHEME_NAME:
+                if (!this.schema.get_string('gtk-theme').endsWith("-dark")) {
+                    this.schema.set_string('gtk-theme', this.schema.get_string('gtk-theme') + "-dark");
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     enable() {
-        const handleThemeChange = (theme_name) => {
-            switch(theme_name)
-            {
-                case DEFAULT_SCHEME_NAME:
-                case LIGHT_SCHEME_NAME:
-                    if (this.schema.get_string('gtk-theme').endsWith("-dark")) {
-                        this.schema.set_string('gtk-theme', this.schema.get_string('gtk-theme').slice(0,-5));
-                    }
-                    break;
-                case DARK_SCHEME_NAME:
-                    if (!this.schema.get_string('gtk-theme').endsWith("-dark")) {
-                        this.schema.set_string('gtk-theme', this.schema.get_string('gtk-theme') + "-dark");
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        const onSettingChanged = (connection, sender, path, iface, signal, params) => {
-            const setting_category = params.get_child_value(0);
-            if (setting_category.get_type_string() !== 's' || setting_category.get_string()[0] !== 'org.gnome.desktop.interface')
-                return;
-
-            const setting_name = params.get_child_value(1);
-            if (setting_name.get_type_string() !== 's' || setting_name.get_string()[0] !== 'color-scheme')
-                return;
-
-            const setting_value = params.get_child_value(2).get_child_value(0);
-            if (setting_value.get_type_string() !== 's')
-                return
-
-            handleThemeChange(setting_value.get_string()[0]);
-        }
-
-        this.connection = Gio.DBus.session;
-        this.handlerId = this.connection.signal_subscribe(
-            null,
-            'org.freedesktop.portal.Settings',
-            'SettingChanged',
-            '/org/freedesktop/portal/desktop',
-            'org.gnome.desktop.interface',
-            Gio.DBusSignalFlags.NONE,
-            onSettingChanged
-        );
+        this.schema = Gio.Settings.new('org.gnome.desktop.interface');
+        this.id = this.schema.connect('changed::color-scheme', () => {
+            let value = this.schema.get_string('color-scheme');
+            this.handleThemeChange(value);
+        });
     }
 
     disable() {
-        this.connection.signal_unsubscribe(this.handlerId);
+        if (this.schema) {
+            if (this.id) {
+                this.schema.disconnect(this.id)
+                this.id = null
+            }
+            this.schema = null
+        }
     }
 }
 
