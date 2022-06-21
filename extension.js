@@ -45,13 +45,18 @@ class Extension {
                 break;
         }
     }
+    
+    handleCurrentTheme = () => {
+        let value = this.schema.get_string('color-scheme');
+        this.handleThemeChange(value);
+    }
 
     enable() {
         this.schema = Gio.Settings.new('org.gnome.desktop.interface');
         this.id = this.schema.connect('changed::color-scheme', () => {
-            let value = this.schema.get_string('color-scheme');
-            this.handleThemeChange(value);
+            this.handleCurrentTheme();
         });
+        this.handleCurrentTheme();
     }
 
     disable() {
@@ -63,6 +68,7 @@ class Extension {
             this.schema = null
         }
     }
+   
 }
 
 function init() {
