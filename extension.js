@@ -59,10 +59,10 @@ export default class Extension {
     disable() {
         if (this.schema) {
             if (this.id) {
-                this.schema.disconnect(this.id)
-                this.id = null
+                this.schema.disconnect(this.id);
+                this.id = null;
             }
-            this.schema = null
+            this.schema = null;
         }
     }
 }
