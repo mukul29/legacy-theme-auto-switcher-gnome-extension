@@ -17,7 +17,7 @@
  */
 
 /* exported init */
-const { Gio } = imports.gi;
+import Gio from 'gi://Gio';
 
 const DEFAULT_SCHEME_NAME = 'default';
 const LIGHT_SCHEME_NAME = 'prefer-light';
