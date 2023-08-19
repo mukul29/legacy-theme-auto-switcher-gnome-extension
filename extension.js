@@ -42,7 +42,7 @@ export default class Extension {
                 break;
         }
     }
-    
+
     handleCurrentTheme = () => {
         let value = this.schema.get_string('color-scheme');
         this.handleThemeChange(value);
@@ -65,5 +65,4 @@ export default class Extension {
             this.schema = null
         }
     }
-   
 }
