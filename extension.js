@@ -16,17 +16,14 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-/* exported init */
-const { Gio } = imports.gi;
+/* exported Extension */
+import Gio from 'gi://Gio';
 
 const DEFAULT_SCHEME_NAME = 'default';
 const LIGHT_SCHEME_NAME = 'prefer-light';
 const DARK_SCHEME_NAME = 'prefer-dark';
 
-class Extension {
-    constructor() {
-    }
-
+export default class Extension {
     handleThemeChange = (theme_name) => {
         switch(theme_name)
         {
@@ -45,7 +42,7 @@ class Extension {
                 break;
         }
     }
-    
+
     handleCurrentTheme = () => {
         let value = this.schema.get_string('color-scheme');
         this.handleThemeChange(value);
@@ -62,15 +59,10 @@ class Extension {
     disable() {
         if (this.schema) {
             if (this.id) {
-                this.schema.disconnect(this.id)
-                this.id = null
+                this.schema.disconnect(this.id);
+                this.id = null;
             }
-            this.schema = null
+            this.schema = null;
         }
     }
-   
-}
-
-function init() {
-    return new Extension();
 }
