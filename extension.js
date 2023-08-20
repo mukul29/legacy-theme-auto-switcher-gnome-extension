@@ -23,7 +23,7 @@ const DEFAULT_SCHEME_NAME = 'default';
 const LIGHT_SCHEME_NAME = 'prefer-light';
 const DARK_SCHEME_NAME = 'prefer-dark';
 
-export default class Extension {
+export default class LegacyThemeSchemeAutoSwitcher {
     handleThemeChange = (theme_name) => {
         switch(theme_name)
         {
