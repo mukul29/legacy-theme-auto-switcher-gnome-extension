@@ -4,7 +4,8 @@
   "url": "https://github.com/mukul29/legacy-theme-auto-switcher-gnome-extension",
   "uuid": "legacyschemeautoswitcher@joshimukul29.gmail.com",
   "shell-version": [
-    "45"
+    "45",
+    "46"
   ],
   "version": 1
 }
