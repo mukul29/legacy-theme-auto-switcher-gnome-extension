@@ -31,11 +31,22 @@ export default class LegacyThemeSchemeAutoSwitcher {
             case LIGHT_SCHEME_NAME:
                 if (this.schema.get_string('gtk-theme').endsWith("-dark")) {
                     this.schema.set_string('gtk-theme', this.schema.get_string('gtk-theme').slice(0,-5));
+                    this.schema.set_string('icon-theme', this.schema.get_string('icon-theme').slice(0,-5));
                 }
                 break;
             case DARK_SCHEME_NAME:
                 if (!this.schema.get_string('gtk-theme').endsWith("-dark")) {
                     this.schema.set_string('gtk-theme', this.schema.get_string('gtk-theme') + "-dark");
+                    
+                    if (this.schema.get_string('icon-theme').startsWith("Papirus")) {
+                        if (!this.schema.get_string('icon-theme').endsWith("-Dark")) {
+                            this.schema.set_string('icon-theme', this.schema.get_string('icon-theme') + "-Dark");
+                        }
+                    } else {
+                        if (!this.schema.get_string('icon-theme').endsWith("-dark")) {
+                            this.schema.set_string('icon-theme', this.schema.get_string('icon-theme') + "-dark");
+                        }
+                    }
                 }
                 break;
             default:
