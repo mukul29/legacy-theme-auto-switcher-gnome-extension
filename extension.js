@@ -43,17 +43,39 @@ export default class LegacyThemeSchemeAutoSwitcher {
         }
     }
 
+    handleIconThemeChange = (theme_name) => {
+        switch (theme_name) {
+            case DEFAULT_SCHEME_NAME:
+                break;
+            case LIGHT_SCHEME_NAME:
+                if (this.schema.get_string('icon-theme').endsWith("-dark")) {
+                    this.schema.set_string('icon-theme', this.schema.get_string('icon-theme').slice(0,-5));
+                }
+                break;
+            case DARK_SCHEME_NAME:
+                if (!this.schema.get_string('icon-theme').endsWith("-dark")) {
+                    this.schema.set_string('icon-theme', this.schema.get_string('icon-theme') + "-dark");
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
     handleCurrentTheme = () => {
         let value = this.schema.get_string('color-scheme');
         this.handleThemeChange(value);
+        this.handleIconThemeChange(value);
     }
 
     enable() {
         this.schema = Gio.Settings.new('org.gnome.desktop.interface');
         this.id = this.schema.connect('changed::color-scheme', () => {
             this.handleCurrentTheme();
+            this.handleIconThemeChange();
         });
         this.handleCurrentTheme();
+        this.handleIconThemeChange();
     }
 
     disable() {
